@@ -12,13 +12,15 @@ local js = require("testswitch/javascript")
 --- @field test_paths fun(Path): Path[]
 --- @field origin_paths fun(Path): Path[]
 
+--- @type Expansion
+local js_expansion = { is_test = js.is_test, test_paths = js.test_paths, origin_paths = js.origin_paths }
+
 --- @type { [string]: Expansion }
 local lookup_table = {
-  ts = {
-    is_test = js.is_test,
-    test_paths = js.test_paths,
-    origin_paths = js.origin_paths,
-  }
+  ts = js_expansion,
+  tsx = js_expansion,
+  js = js_expansion,
+  jsx = js_expansion,
 }
 
 --- @param file Path
