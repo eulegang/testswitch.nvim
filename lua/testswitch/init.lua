@@ -1,5 +1,7 @@
 local str = require("string")
 
+local js = require("testswitch/javascript")
+
 --- @class Path
 --- @field dir string
 --- @field name string
@@ -10,64 +12,12 @@ local str = require("string")
 --- @field test_paths fun(Path): Path[]
 --- @field origin_paths fun(Path): Path[]
 
---- @param path Path
---- @return boolean
-local function js_is_test(path)
-  return str.match(path.name, ".test$")
-end
-
---- @param path Path
---- @return Path[]
-local function js_test_paths(path)
-  local res = {}
-
-  table.insert(res, {
-    dir = path.dir,
-    name = path.name .. ".test",
-    ext = path.ext,
-  })
-
-  table.insert(res, {
-    dir = path.dir .. "/test",
-    name = path.name .. ".test",
-    ext = path.ext,
-  })
-
-  return res
-end
-
---- @param path Path
---- @return Path[]
-local function js_origin_paths(path)
-  local res = {}
-
-  if string.match(path.name, "%.test$") then
-    table.insert(res, {
-      dir = path.dir,
-      name = string.gsub(path.name, ".test$", ""),
-      ext = path.ext,
-    })
-
-    if string.match(path.dir, "/test$") then
-      table.insert(res, {
-        dir = string.gsub(path.dir, "/test$", ""),
-        name = string.gsub(path.name, ".test$", ""),
-        ext = path.ext,
-      })
-    end
-  end
-
-
-  return res
-end
-
-
 --- @type { [string]: Expansion }
 local lookup_table = {
   ts = {
-    is_test = js_is_test,
-    test_paths = js_test_paths,
-    origin_paths = js_origin_paths,
+    is_test = js.is_test,
+    test_paths = js.test_paths,
+    origin_paths = js.origin_paths,
   }
 }
 
