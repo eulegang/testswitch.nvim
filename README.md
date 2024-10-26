@@ -10,7 +10,7 @@ it's recommended to use Lazy.
 ```
 return {
   {
-    "eulegang/testswitch",
+    "eulegang/testswitch.nvim",
     keys = {
       {
         "<c-n>",
