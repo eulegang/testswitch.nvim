@@ -1,7 +1,3 @@
-local str = require("string")
-
-local js = require("testswitch/javascript")
-
 --- @class Path
 --- @field dir string
 --- @field name string
@@ -12,90 +8,26 @@ local js = require("testswitch/javascript")
 --- @field test_paths fun(Path): Path[]
 --- @field origin_paths fun(Path): Path[]
 
---- @type Expansion
-local js_expansion = { is_test = js.is_test, test_paths = js.test_paths, origin_paths = js.origin_paths }
-
---- @type { [string]: Expansion }
-local lookup_table = {
-  ts = js_expansion,
-  tsx = js_expansion,
-  js = js_expansion,
-  jsx = js_expansion,
-}
-
---- @param file Path
---- @return boolean
-local function is_test(file)
-  return lookup_table[file.ext].is_test(file)
-end
-
---- @param file string
---- @return Path
-local function parts(file)
-  local _, _, dir, name, ext = str.find(file, "(.*)/([^/]*)%.(%a*)")
-
-  return {
-    dir = dir,
-    name = name,
-    ext = ext,
-  }
-end
-
---- @param file Path
---- @return string
-local function reconstitute(file)
-  return file.dir .. "/" .. file.name .. "." .. file.ext
-end
-
-
-local function expand_origin(file)
-  local candidates = lookup_table[file.ext].origin_paths(file)
-
-  for _, candidate in ipairs(candidates) do
-    local path = reconstitute(candidate)
-
-    if vim.fn.filereadable(path) then
-      return path
-    end
-  end
-
-  return nil
-end
-
---- @param file Path
---- @return string | nil
-local function expand_test(file)
-  local candidates = lookup_table[file.ext].test_paths(file)
-
-  for _, candidate in ipairs(candidates) do
-    local path = reconstitute(candidate)
-
-    if vim.fn.filereadable(path) then
-      return path
-    end
-  end
-
-  return nil
-end
-
+local reg = require("testswitch.registry")
+local util = require("testswitch.util")
 
 local function toggle()
-  local file = parts(vim.fn.expand("%"))
+  local file = util.parts(vim.fn.expand("%"))
 
-  if lookup_table[file.ext] == nil then
+  if not reg.is_registered(file.ext) then
     return
   end
 
-  if is_test(file)
+  if reg.is_test(file)
   then
-    local to = expand_origin(file)
+    local to = reg.expand_origin(file)
     if to then
       vim.cmd.e(to)
     else
       error("can not find origin file")
     end
   else
-    local to = expand_test(file)
+    local to = reg.expand_test(file)
     if to then
       vim.cmd.e(to)
     else
@@ -104,16 +36,53 @@ local function toggle()
   end
 end
 
-
 --- Setup this plugin
 --- @param opts {ext: {[string]: Expansion }}
 local function setup(opts)
-  for ext, extension in pairs(opts.ext) do
-    lookup_table[ext] = extension
+  for ext, expansion in pairs(opts.ext) do
+    reg.register(ext, expansion)
+  end
+end
+
+--- @return boolean | nil
+local function is_test()
+  local file = util.parts(vim.fn.expand("%"))
+
+  if file == "" then
+    return nil
+  end
+
+  if not reg.is_registered(file.ext) then
+    return nil
+  end
+
+  return reg.is_test(file)
+end
+
+--- @return string | nil
+local function counterpart()
+  local path = vim.fn.expand("%")
+  if path == "" then
+    return nil
+  end
+
+  local file = util.parts(vim.fn.expand("%"))
+
+  if not reg.is_registered(file.ext) then
+    return nil
+  end
+
+  if reg.is_test(file)
+  then
+    return reg.expand_origin(file)
+  else
+    return reg.expand_test(file)
   end
 end
 
 return {
   toggle = toggle,
-  setup = setup
+  setup = setup,
+  is_test = is_test,
+  counterpart = counterpart,
 }
