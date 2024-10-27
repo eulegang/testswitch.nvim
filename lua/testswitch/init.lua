@@ -102,7 +102,7 @@ end
 
 
 --- Setup this plugin
---- @param opts {ext: {[stirng]: extension }}
+--- @param opts {ext: {[string]: Expansion }}
 local function setup(opts)
   for ext, extension in pairs(opts.ext) do
     lookup_table[ext] = extension
