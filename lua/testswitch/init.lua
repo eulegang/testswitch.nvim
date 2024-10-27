@@ -82,6 +82,10 @@ end
 local function toggle()
   local file = parts(vim.fn.expand("%"))
 
+  if lookup_table[file.ext] == nil then
+    return
+  end
+
   if is_test(file)
   then
     local to = expand_origin(file)
