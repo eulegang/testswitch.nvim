@@ -24,7 +24,7 @@ local function expand_origin(file)
   for _, candidate in ipairs(candidates) do
     local path = util.reconstitute(candidate)
 
-    if vim.fn.filereadable(path) then
+    if vim.fn.filereadable(path) == 1 then
       return path
     end
   end
@@ -40,7 +40,7 @@ local function expand_test(file)
   for _, candidate in ipairs(candidates) do
     local path = util.reconstitute(candidate)
 
-    if vim.fn.filereadable(path) then
+    if vim.fn.filereadable(path) == 1 then
       return path
     end
   end
