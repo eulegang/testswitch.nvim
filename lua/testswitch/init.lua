@@ -44,9 +44,10 @@ local function setup(opts)
   end
 end
 
+--- @param path string
 --- @return boolean | nil
-local function is_test()
-  local file = util.parts(vim.fn.expand("%"))
+local function is_test(path)
+  local file = util.parts(path)
 
   if file == "" then
     return nil
@@ -59,14 +60,10 @@ local function is_test()
   return reg.is_test(file)
 end
 
+--- @param path string
 --- @return string | nil
-local function counterpart()
-  local path = vim.fn.expand("%")
-  if path == "" then
-    return nil
-  end
-
-  local file = util.parts(vim.fn.expand("%"))
+local function counterpart(path)
+  local file = util.parts(path)
 
   if not reg.is_registered(file.ext) then
     return nil
