@@ -37,9 +37,9 @@ local function toggle()
 end
 
 --- Setup this plugin
---- @param opts {ext: {[string]: Expansion }}
+--- @param opts {ext?: {[string]: Expansion }}
 local function setup(opts)
-  for ext, expansion in pairs(opts.ext) do
+  for ext, expansion in pairs(opts.ext or {}) do
     reg.register(ext, expansion)
   end
 end
