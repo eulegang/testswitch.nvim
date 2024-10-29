@@ -18,14 +18,26 @@ local function test_paths(path)
   })
 
   table.insert(res, {
-    dir = path.dir .. "/test",
+    dir = path.dir .. "/tests",
     name = path.name .. ".test",
     ext = path.ext,
   })
 
   table.insert(res, {
-    dir = path.dir .. "/__test__",
+    dir = path.dir .. "/tests",
+    name = path.name,
+    ext = path.ext,
+  })
+
+  table.insert(res, {
+    dir = path.dir .. "/__tests__",
     name = path.name .. ".test",
+    ext = path.ext,
+  })
+
+  table.insert(res, {
+    dir = path.dir .. "/__tests__",
+    name = path.name,
     ext = path.ext,
   })
 
@@ -44,17 +56,17 @@ local function origin_paths(path)
       ext = path.ext,
     })
 
-    if string.match(path.dir, "/test$") then
+    if string.match(path.dir, "/tests$") then
       table.insert(res, {
-        dir = string.gsub(path.dir, "/test$", ""),
+        dir = string.gsub(path.dir, "/tests$", ""),
         name = string.gsub(path.name, ".test$", ""),
         ext = path.ext,
       })
     end
 
-    if string.match(path.dir, "/__test__$") then
+    if string.match(path.dir, "/__tests__$") then
       table.insert(res, {
-        dir = string.gsub(path.dir, "/__test__$", ""),
+        dir = string.gsub(path.dir, "/__tests__$", ""),
         name = string.gsub(path.name, ".test$", ""),
         ext = path.ext,
       })
