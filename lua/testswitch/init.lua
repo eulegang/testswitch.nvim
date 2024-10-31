@@ -24,14 +24,14 @@ local function toggle()
     if to then
       vim.cmd.e(to)
     else
-      error("can not find origin file")
+      vim.notify("can not find origin file", vim.log.levels.ERROR)
     end
   else
     local to = reg.expand_test(file)
     if to then
       vim.cmd.e(to)
     else
-      error("can not find test file")
+      vim.notify("can not find test file", vim.log.levels.ERROR)
     end
   end
 end
