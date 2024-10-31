@@ -39,6 +39,14 @@ local function test_paths(path)
     ext = path.ext,
   })
 
+  if path.dir:match("^src/") then
+    table.insert(res, {
+      dir = path.dir:gsub("^src/", "test/"),
+      name = path.name .. ".test",
+      ext = path.ext,
+    })
+  end
+
   return res
 end
 
@@ -71,6 +79,13 @@ local function origin_paths(path)
     end
   end
 
+  if path.dir:match("^test/") then
+    table.insert(res, {
+      dir = path.dir:gsub("^test/", "src/"),
+      name = path.name:gsub(".test$", ""),
+      ext = path.ext,
+    })
+  end
 
   return res
 end
