@@ -1,5 +1,3 @@
-local str = require("string")
-
 --- @param file Path
 --- @return string
 local function reconstitute(file)
@@ -9,7 +7,7 @@ end
 --- @param file string
 --- @return Path
 local function parts(file)
-  local _, _, dir, name, ext = str.find(file, "(.*)/([^/]*)%.(%a*)")
+  local _, _, dir, name, ext = file:find("(.*)/([^/]*)%.(%a*)")
 
   return {
     dir = dir,

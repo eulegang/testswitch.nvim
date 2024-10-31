@@ -1,9 +1,7 @@
-local str = require("string")
-
 --- @param path Path
 --- @return boolean
 local function is_test(path)
-  return str.match(path.name, ".test$")
+  return path.name:match(".test$")
 end
 
 --- @param path Path
@@ -49,25 +47,25 @@ end
 local function origin_paths(path)
   local res = {}
 
-  if string.match(path.name, "%.test$") then
+  if path.name:match("%.test$") then
     table.insert(res, {
       dir = path.dir,
-      name = string.gsub(path.name, ".test$", ""),
+      name = path.name:gsub(".test$", ""),
       ext = path.ext,
     })
 
-    if string.match(path.dir, "/tests$") then
+    if path.dir:match("/tests$") then
       table.insert(res, {
-        dir = string.gsub(path.dir, "/tests$", ""),
-        name = string.gsub(path.name, ".test$", ""),
+        dir = path.dir:gsub("/tests$", ""),
+        name = path.name:gsub(".test$", ""),
         ext = path.ext,
       })
     end
 
-    if string.match(path.dir, "/__tests__$") then
+    if path.dir:match("/__tests__$") then
       table.insert(res, {
-        dir = string.gsub(path.dir, "/__tests__$", ""),
-        name = string.gsub(path.name, ".test$", ""),
+        dir = path.dir:gsub("/__tests__$", ""),
+        name = path.name:gsub(".test$", ""),
         ext = path.ext,
       })
     end
