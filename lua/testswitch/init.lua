@@ -3,10 +3,13 @@
 --- @field name string
 --- @field ext string
 
+--- @alias Test fun(Path): boolean
+--- @alias Potential fun(Path): Path[]
+
 --- @class Expansion
---- @field is_test fun(Path): boolean
---- @field test_paths fun(Path): Path[]
---- @field origin_paths fun(Path): Path[]
+--- @field is_test? fun(Path, Test?): boolean
+--- @field test_paths? fun(Path, Potential?): Path[]
+--- @field origin_paths fun(Path, Potential?): Path[]
 
 local reg = require("testswitch.registry")
 local util = require("testswitch.util")
@@ -37,8 +40,9 @@ local function toggle()
 end
 
 --- Setup this plugin
---- @param opts {ext?: {[string]: Expansion }}
+--- @param opts {ext?: {[string]: Expansion | string }}
 local function setup(opts)
+  reg.clear()
   for ext, expansion in pairs(opts.ext or {}) do
     reg.register(ext, expansion)
   end
