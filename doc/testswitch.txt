@@ -1,0 +1,29 @@
+testswitch.txt
+
+================================================================================
+Introduction                                                   testswitch.nvim
+
+testswitch defines mappings between code and tests on that code
+
+it makes it easy to switch between test and it's code
+
+
+================================================================================
+API                                                               *testswitch.api*
+
+toggle()                                                       *testswitch.toggle*
+  switches the current buffer between code and test
+
+is_test({path})                                               *testswitch.is_test*
+  checks to see whether the the path provided is a test file
+
+  Parameters: ~
+    {path} (string) A path to check
+
+counterpart({path})                                       *testswitch.counterpart
+  returns the code if the path is a test, or the test if the path is code
+
+  Parameters: ~
+    {path} (string) a path to find it's counterpart
+
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:

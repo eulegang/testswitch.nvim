@@ -1,0 +1,4 @@
+testswitch.api	testswitch.txt	/*testswitch.api*
+testswitch.toggle	testswitch.txt	/*testswitch.toggle*
+testswitch.is_test	testswitch.txt	/*testswitch.is_test*
+testswitch.counterpart	testswitch.txt	/*testswitch.counterpart*
