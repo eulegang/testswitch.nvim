@@ -1,5 +1,4 @@
 local stub = require("luassert.stub")
-local match = require("luassert.match")
 local mod = require("testswitch.init")
 
 local function file_exists(files)
@@ -64,5 +63,31 @@ describe("#toggle", function()
       assert.spy(e).was.not_called_with("src/xyz.test.ts")
       assert.spy(notify).was.called_with("can not find test file", vim.log.levels.ERROR)
     end)
+  end)
+end)
+
+describe("#is_test", function()
+  it("should check for test file", function()
+    assert.is_true(mod.is_test("src/xyz.test.ts"))
+  end)
+  it("should check for test file", function()
+    assert.is_not_true(mod.is_test("src/xyz.ts"))
+  end)
+end)
+
+describe("#counterpart", function()
+  before_each(function()
+    stub(vim.fn, "filereadable").invokes(file_exists({
+      "src/xyz.ts",
+      "src/xyz.test.ts",
+    }))
+  end)
+
+  it("should show the test", function()
+    assert.are.equals(mod.counterpart("src/xyz.test.ts"), "src/xyz.ts")
+  end)
+
+  it("should show the code", function()
+    assert.are.equals(mod.counterpart("src/xyz.ts"), "src/xyz.test.ts")
   end)
 end)
