@@ -15,7 +15,7 @@ local reg = require("testswitch.registry")
 local util = require("testswitch.util")
 
 local function toggle()
-  local file = util.parts(vim.fn.expand("%"))
+  local file = util.parts(vim.fn.expand("%:."))
 
   if not reg.is_registered(file.ext) then
     return
